@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ptteng.water.system.mapper.RoleModuleMapper">
+    <resultMap id="BaseResultMap" type="com.ptteng.water.system.pojo.RoleModule">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="role_id" property="roleId" jdbcType="BIGINT"/>
+        <result column="module_id" property="moduleId" jdbcType="BIGINT"/>
+        <result column="create_by" property="createBy" jdbcType="BIGINT"/>
+        <result column="update_by" property="updateBy" jdbcType="BIGINT"/>
+        <result column="update_at" property="updateAt" jdbcType="BIGINT"/>
+        <result column="create_at" property="createAt" jdbcType="BIGINT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, role_id, module_id, create_by, update_by, update_at, create_at
+  </sql>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from role_module
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from role_module
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByRid" parameterType="java.lang.Long">
+        delete from role_module
+        where role_id = #{rid,jdbcType=BIGINT}
+    </delete>
+
+    <insert id="insert" parameterType="com.ptteng.water.system.pojo.RoleModule" useGeneratedKeys="true"
+            keyProperty="id">
+    insert into role_module (id, role_id, module_id, 
+      create_by, update_by, update_at, 
+      create_at)
+    values (#{id,jdbcType=BIGINT}, #{roleId,jdbcType=BIGINT}, #{moduleId,jdbcType=BIGINT}, 
+      #{createBy,jdbcType=BIGINT}, #{updateBy,jdbcType=BIGINT}, #{updateAt,jdbcType=BIGINT}, 
+      #{createAt,jdbcType=BIGINT})
+  </insert>
+
+    <insert id="insertSelective" parameterType="com.ptteng.water.system.pojo.RoleModule" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into role_module
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="roleId != null">
+                role_id,
+            </if>
+            <if test="moduleId != null">
+                module_id,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="updateBy != null">
+                update_by,
+            </if>
+            <if test="updateAt != null">
+                update_at,
+            </if>
+            <if test="createAt != null">
+                create_at,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="roleId != null">
+                #{roleId,jdbcType=BIGINT},
+            </if>
+            <if test="moduleId != null">
+                #{moduleId,jdbcType=BIGINT},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=BIGINT},
+            </if>
+            <if test="updateBy != null">
+                #{updateBy,jdbcType=BIGINT},
+            </if>
+            <if test="updateAt != null">
+                #{updateAt,jdbcType=BIGINT},
+            </if>
+            <if test="createAt != null">
+                #{createAt,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.ptteng.water.system.pojo.RoleModule">
+        update role_module
+        <set>
+            <if test="roleId != null">
+                role_id = #{roleId,jdbcType=BIGINT},
+            </if>
+            <if test="moduleId != null">
+                module_id = #{moduleId,jdbcType=BIGINT},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=BIGINT},
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy,jdbcType=BIGINT},
+            </if>
+            <if test="updateAt != null">
+                update_at = #{updateAt,jdbcType=BIGINT},
+            </if>
+            <if test="createAt != null">
+                create_at = #{createAt,jdbcType=BIGINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.ptteng.water.system.pojo.RoleModule">
+    update role_module
+    set role_id = #{roleId,jdbcType=BIGINT},
+      module_id = #{moduleId,jdbcType=BIGINT},
+      create_by = #{createBy,jdbcType=BIGINT},
+      update_by = #{updateBy,jdbcType=BIGINT},
+      update_at = #{updateAt,jdbcType=BIGINT},
+      create_at = #{createAt,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+    <select id="findMidsByRid"  resultType="java.lang.Long"  parameterType="java.lang.Long">
+        select
+        module_id
+        from role_module
+        where role_id = #{rid,jdbcType=BIGINT}
+    </select>
+
+    <select id="findidsByRid"  resultType="java.lang.Long"  parameterType="java.lang.Long">
+        select
+            id
+        from role_module
+        where role_id = #{rid,jdbcType=BIGINT}
+    </select>
+
+    <insert id="insertList" parameterType="java.util.List">
+        insert into role_module (id, role_id, module_id,
+        create_by, update_by, update_at,
+        create_at)
+        <foreach collection="list" item="roleModule" close="" open="" index="index" separator="UNION ALL">
+            select #{roleModule.id,jdbcType=BIGINT}, #{roleModule.roleId,jdbcType=BIGINT}, #{roleModule.moduleId,jdbcType=BIGINT},
+            #{roleModule.createBy,jdbcType=BIGINT}, #{roleModule.updateBy,jdbcType=BIGINT}, #{roleModule.updateAt,jdbcType=BIGINT},
+            #{roleModule.createAt,jdbcType=BIGINT}
+        </foreach>
+    </insert>
+
+    <select id="getObjectsByIds" resultMap="BaseResultMap" parameterType="java.util.List">
+
+        select
+        <include refid="Base_Column_List"/>
+
+        from role_module
+        where id in
+        <foreach collection="list" item="item" close=")" open="(" index="index" separator=",">
+            #{item,jdbcType=BIGINT}
+        </foreach>
+    </select>
+
+</mapper>

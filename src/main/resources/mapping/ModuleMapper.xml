@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ptteng.water.system.mapper.ModuleMapper" >
+  <resultMap id="BaseResultMap" type="com.ptteng.water.system.pojo.Module" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="menu_id" property="menuID" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="parent_id" property="parentID" jdbcType="BIGINT" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="BIGINT" />
+    <result column="update_by" property="updateBy" jdbcType="BIGINT" />
+    <result column="update_at" property="updateAt" jdbcType="BIGINT" />
+    <result column="create_at" property="createAt" jdbcType="BIGINT" />
+    <result column="icon" property="icon" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, menu_id, url, parent_id, type, create_by, update_by, update_at, create_at, 
+    icon
+  </sql>
+  <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from module
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+    <select id="findList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from module
+      order by update_at desc
+    </select>
+
+
+  <select id="findIdsList" resultType="java.lang.Long">
+    select
+    id
+    from module
+    order by update_at desc
+  </select>
+
+  <select id="getObjectsByIds" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from module
+    where id IN
+      <foreach item="item" index="index" collection="list"
+               open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    order by update_at desc
+  </select>
+
+  <delete id="deleteById" parameterType="java.lang.Long" >
+    delete from module
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insertModule" parameterType="com.ptteng.water.system.pojo.Module" useGeneratedKeys="true"
+          keyProperty="id">
+    insert into module (id, name, menu_id, 
+      url, parent_id, type, 
+      create_by, update_by, update_at, 
+      create_at, icon)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{menuID,jdbcType=VARCHAR},
+      #{url,jdbcType=VARCHAR}, #{parentID,jdbcType=BIGINT}, #{type,jdbcType=VARCHAR},
+      #{createBy,jdbcType=BIGINT}, #{updateBy,jdbcType=BIGINT}, #{updateAt,jdbcType=BIGINT}, 
+      #{createAt,jdbcType=BIGINT}, #{icon,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ptteng.water.system.pojo.Module" useGeneratedKeys="true"
+          keyProperty="id">
+    insert into module
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="menuID != null" >
+        menu_id,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="parentID != null" >
+        parent_id,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="updateBy != null" >
+        update_by,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+      <if test="createAt != null" >
+        create_at,
+      </if>
+      <if test="icon != null" >
+        icon,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="menuID != null" >
+        #{menuID,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="parentID != null" >
+        #{parentID,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=BIGINT},
+      </if>
+      <if test="updateBy != null" >
+        #{updateBy,jdbcType=BIGINT},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=BIGINT},
+      </if>
+      <if test="createAt != null" >
+        #{createAt,jdbcType=BIGINT},
+      </if>
+      <if test="icon != null" >
+        #{icon,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ptteng.water.system.pojo.Module" >
+    update module
+    <set>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="menuID != null" >
+        menu_id = #{menuID,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="parentID != null" >
+        parent_id = #{parentID,jdbcType=BIGINT},
+      </if>
+
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=BIGINT},
+      </if>
+      <if test="updateBy != null" >
+        update_by = #{updateBy,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=BIGINT},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=BIGINT},
+      </if>
+      <if test="icon != null" >
+        icon = #{icon,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateById" parameterType="com.ptteng.water.system.pojo.Module" >
+    update module
+    set name = #{name,jdbcType=VARCHAR},
+      menu_id = #{menuID,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      parent_id = #{parentID,jdbcType=BIGINT},
+      type = #{type,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=BIGINT},
+      update_by = #{updateBy,jdbcType=BIGINT},
+      update_at = #{updateAt,jdbcType=BIGINT},
+      create_at = #{createAt,jdbcType=BIGINT},
+      icon = #{icon,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

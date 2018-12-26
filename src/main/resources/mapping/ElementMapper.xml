@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ptteng.water.system.mapper.ElementMapper">
+    <resultMap id="BaseResultMap" type="com.ptteng.water.system.pojo.Element">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="create_at" jdbcType="BIGINT" property="createAt" />
+        <result column="create_by" jdbcType="BIGINT" property="createBy" />
+        <result column="update_at" jdbcType="BIGINT" property="updateAt" />
+        <result column="update_by" jdbcType="BIGINT" property="updateBy" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="expect_grade" jdbcType="VARCHAR" property="expectGrade" />
+        <result column="expect" jdbcType="LONGVARCHAR" property="expect" />
+        <result column="standard" jdbcType="LONGVARCHAR" property="standard" />
+        <result column="explain" jdbcType="LONGVARCHAR" property="explain" />
+        <result column="template_id" jdbcType="BIGINT" property="templateId" />
+        <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, create_at, create_by, update_at, update_by, `name`, expect_grade, expect, `standard`, `explain`, template_id, parent_id
+    </sql>
+    <parameterMap id="Element" type="com.ptteng.water.system.pojo.Element"/>
+
+    <insert id="addElement" parameterMap="Element" useGeneratedKeys="true" keyProperty="id">
+        insert into element
+        (create_at, create_by, update_at, update_by,
+        `name`, expect_grade, expect, `standard`, `explain`,
+        template_id, parent_id)
+        values
+        (#{createAt}, #{createBy}, #{updateAt}, #{updateBy},
+        #{name}, #{expectGrade}, #{expect}, #{standard}, #{explain},
+        #{templateId}, #{parentId})
+    </insert>
+
+    <select id="findElements" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from element
+        where template_id = #{templateId}
+    </select>
+
+    <delete id="deleteElement">
+        delete from element where id = #{id}
+    </delete>
+
+    <update id="updateElement" parameterMap="Element">
+        update element
+        <set>
+            <if test="name != null">
+                `name` = #{name},
+            </if>
+            <if test="expectGrade != null">
+                `expect_grade` = #{expectGrade},
+            </if>
+            <if test="expect != null">
+                `expect` = #{expect},
+            </if>
+            <if test="standard != null">
+                `standard` = #{standard},
+            </if>
+            <if test="explain != null">
+                `explain` = #{explain},
+            </if>
+            <if test="templateId != null">
+                template_id = #{templateId},
+            </if>
+            <if test="parentId != null">
+                `parent_id` = #{parentId},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy},
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy},
+            </if>
+            <if test="createAt != null">
+                create_at = #{createAt},
+            </if>
+            <if test="updateAt != null">
+                update_at = #{updateAt},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="findById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from element
+        where id = #{id}
+    </select>
+</mapper>

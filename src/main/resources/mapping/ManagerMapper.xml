@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ptteng.water.system.mapper.ManagerMapper" >
+  <resultMap id="BaseResultMap" type="com.ptteng.water.system.pojo.Manager" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="nick" property="nick" jdbcType="VARCHAR" />
+    <result column="pwd" property="pwd" jdbcType="VARCHAR" />
+    <result column="role_id" property="roleId" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="BIGINT" />
+    <result column="update_by" property="updateBy" jdbcType="BIGINT" />
+    <result column="update_at" property="updateAt" jdbcType="BIGINT" />
+    <result column="create_at" property="createAt" jdbcType="BIGINT" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, name, nick, pwd, role_id, status, create_by, update_by, update_at, create_at
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from manager
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+
+  <select id="findListbyIds" resultMap="BaseResultMap" parameterType="java.util.List">
+
+    select
+    <include refid="Base_Column_List"/>
+
+    from manager
+    where id in
+    <foreach collection="list" item="item" close=")" open="(" index="index" separator=",">
+      #{item,jdbcType=BIGINT}
+    </foreach>
+  </select>
+
+    <select id="selectByName" resultMap="BaseResultMap"  parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List" />
+        from manager
+        where name = #{name,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByRoleAndStatus" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from manager
+        <where>
+            <if test="roleID != null">
+                role_id = #{roleID,jdbcType=BIGINT}
+            </if>
+            <if test="status != null">
+                and  status = #{status,jdbcType=VARCHAR}
+            </if>
+        </where>
+      order by  update_at desc
+    </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from manager
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert" parameterType="com.ptteng.water.system.pojo.Manager" useGeneratedKeys="true"
+          keyProperty="id">
+    insert into manager (id, name, nick,
+      pwd, role_id, status,
+      create_by, update_by, update_at,
+      create_at)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{nick,jdbcType=VARCHAR},
+      #{pwd,jdbcType=VARCHAR}, #{roleID,jdbcType=BIGINT}, #{status,jdbcType=VARCHAR},
+      #{createBy,jdbcType=BIGINT}, #{updateBy,jdbcType=BIGINT}, #{updateAt,jdbcType=BIGINT},
+      #{createAt,jdbcType=BIGINT})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.ptteng.water.system.pojo.Manager" useGeneratedKeys="true"
+          keyProperty="id">
+    insert into manager
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="nick != null" >
+        nick,
+      </if>
+      <if test="pwd != null" >
+        pwd,
+      </if>
+      <if test="roleID != null" >
+        role_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="updateBy != null" >
+        update_by,
+      </if>
+      <if test="updateAt != null" >
+        update_at,
+      </if>
+      <if test="createAt != null" >
+        create_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="nick != null" >
+        #{nick,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null" >
+        #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="roleID != null" >
+        #{roleID,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=BIGINT},
+      </if>
+      <if test="updateBy != null" >
+        #{updateBy,jdbcType=BIGINT},
+      </if>
+      <if test="updateAt != null" >
+        #{updateAt,jdbcType=BIGINT},
+      </if>
+      <if test="createAt != null" >
+        #{createAt,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.ptteng.water.system.pojo.Manager" >
+    update manager
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="nick != null" >
+        nick = #{nick,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null" >
+        pwd = #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="roleID != null" >
+        role_id = #{roleID,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=BIGINT},
+      </if>
+      <if test="updateBy != null" >
+        update_by = #{updateBy,jdbcType=BIGINT},
+      </if>
+      <if test="updateAt != null" >
+        update_at = #{updateAt,jdbcType=BIGINT},
+      </if>
+      <if test="createAt != null" >
+        create_at = #{createAt,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.ptteng.water.system.pojo.Manager" >
+    update manager
+    set name = #{name,jdbcType=VARCHAR},
+      nick = #{nick,jdbcType=VARCHAR},
+      pwd = #{pwd,jdbcType=VARCHAR},
+      role_id = #{roleID,jdbcType=BIGINT},
+      status = #{status,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=BIGINT},
+      update_by = #{updateBy,jdbcType=BIGINT},
+      update_at = #{updateAt,jdbcType=BIGINT},
+      create_at = #{createAt,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

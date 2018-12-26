@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ptteng.water.system.mapper.PerformanceMapper">
+    <resultMap id="BaseResultMap" type="com.ptteng.water.system.pojo.Performance">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="create_at" jdbcType="BIGINT" property="createAt" />
+        <result column="create_by" jdbcType="BIGINT" property="createBy" />
+        <result column="update_at" jdbcType="BIGINT" property="updateAt" />
+        <result column="update_by" jdbcType="BIGINT" property="updateBy" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="template_id" jdbcType="BIGINT" property="templateId" />
+        <result column="year" jdbcType="INTEGER" property="year" />
+        <result column="department_id" jdbcType="BIGINT" property="departmentId" />
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="grade" jdbcType="FLOAT" property="grade" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, create_at, create_by, update_at, update_by, `name`, template_id, `year`, department_id,
+        `status`, grade
+    </sql>
+
+    <parameterMap id="Performance" type="com.ptteng.water.system.pojo.Performance"/>
+
+    <select id="findPerformances" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from performance
+        <where>
+            <if test="name != null ">
+                and name like CONCAT(CONCAT('%', #{name}), '%')
+            </if>
+            <if test="year != null">
+                and year = #{year}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="list != null">
+                and department_id in
+                <foreach item="item" collection="list" separator="," open="(" close=")">
+                    #{item.id}
+                </foreach>
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="findOnePerformance" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from performance
+        where id = #{id}
+    </select>
+
+    <select id="findBytemplateAndYear" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from performance
+        where year = #{year} and template_id = #{templateId}
+    </select>
+
+    <select id="findDepartmentPerformance" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from performance
+        where department_id = #{departmentId}
+        order by year desc
+    </select>
+
+    <insert id="addPerformance" parameterMap="Performance" useGeneratedKeys="true" keyProperty="id">
+        insert into performance (create_at, create_by, update_at,
+        update_by, `name`, template_id, `year`, department_id, grade, status)
+         values (#{createAt}, #{createBy}, #{updateAt},
+         #{updateBy}, #{name}, #{templateId}, #{year}, #{departmentId},#{grade}, #{status});
+    </insert>
+
+    <update id="updatePerformance" parameterMap="Performance">
+        update
+        performance
+        <set>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="grade != null">
+                grade = #{grade},
+            </if>
+            <if test="createBy != null" >
+                create_by = #{createBy},
+            </if>
+            <if test="updateBy != null" >
+                update_by = #{updateBy},
+            </if>
+            <if test="createAt != null" >
+                create_at = #{createAt},
+            </if>
+            <if test="updateAt != null" >
+                update_at = #{updateAt},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePerformance" parameterType="java.lang.Long">
+        delete from
+        performance
+        where id = #{id}
+    </delete>
+
+    <select id="findYears" resultType="java.lang.Integer">
+        select distinct year from performance order by year desc
+    </select>
+
+    <select id="findGradeByDepartmentId" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from performance
+        where department_id = #{departmentId}
+    </select>
+
+    <select id="findByYear" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from performance
+        where year = #{year}
+    </select>
+
+    <select id="findRank" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from performance
+        where department_id in
+        <foreach item="item" collection="list" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+        and `year` = #{year}
+        order by grade desc limit #{from}, #{to}
+    </select>
+
+    <select id="findTemplateId" resultType="java.lang.Long">
+        select distinct template_id
+        from performance
+    </select>
+
+    <delete id="deleteByDepartmentId" parameterType="java.lang.Long">
+        delete from performance
+        where department_id = #{departmentId}
+    </delete>
+</mapper>

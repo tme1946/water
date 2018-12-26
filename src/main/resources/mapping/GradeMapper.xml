@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ptteng.water.system.mapper.GradeMapper">
+    <resultMap id="BaseResultMap" type="com.ptteng.water.system.pojo.Grade">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="create_at" jdbcType="BIGINT" property="createAt" />
+        <result column="create_by" jdbcType="BIGINT" property="createBy" />
+        <result column="update_at" jdbcType="BIGINT" property="updateAt" />
+        <result column="update_by" jdbcType="BIGINT" property="updateBy" />
+        <result column="performance_id" jdbcType="BIGINT" property="performanceId" />
+        <result column="element_id" jdbcType="BIGINT" property="elementId" />
+        <result column="grade" jdbcType="VARCHAR" property="grade" />
+        <result column="actual" jdbcType="LONGVARCHAR" property="actual" />
+    </resultMap>
+    <resultMap id="ElementResultMap" type="com.ptteng.water.system.pojo.Element">
+        <id column="element_id" jdbcType="BIGINT" property="id" />
+        <result column="grade" jdbcType="BIGINT" property="grade" />
+    </resultMap>
+
+    <parameterMap id="Grade" type="com.ptteng.water.system.pojo.Grade"/>
+
+    <sql id="Base_Column_List">
+        id, create_at, create_by, update_at, update_by, performance_id, element_id, grade, actual
+    </sql>
+
+    <select id="listGrade" resultMap="ElementResultMap">
+        select element_id, grade, actual
+        from grade
+        where performance_id = #{performanceId}
+    </select>
+
+    <insert id="addGrade" parameterMap="Grade">
+        insert into
+        grade (create_at, create_by, update_at, update_by,
+         performance_id, element_id, grade, actual)
+         values (#{createAt}, #{createBy}, #{updateAt}, #{updateBy}, #{performanceId}, #{elementId}, #{grade}, #{actual})
+    </insert>
+
+    <delete id="deleteGrade" parameterType="java.lang.Long">
+        delete from grade
+        where performance_id = #{performanceId}
+    </delete>
+    
+    <select id="listElement" resultMap="ElementResultMap">
+        select element_id, grade, actual
+        from grade
+        where performance_id in
+        <foreach item="item" collection="list" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </select>
+
+    <select id="findElements" resultType="java.lang.Long">
+        select distinct
+        element_id
+        from grade
+    </select>
+
+    <update id="updateGrade" parameterMap="Grade">
+        update grade
+        set
+        grade = #{grade},
+        actual = #{actual},
+        update_at = #{updateAt}
+        where element_id = #{elementId}
+        and performance_id = #{performanceId}
+    </update>
+</mapper>

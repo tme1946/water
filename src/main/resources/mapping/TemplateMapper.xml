@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ptteng.water.system.mapper.TemplateMapper">
+    <resultMap id="BaseResultMap" type="com.ptteng.water.system.pojo.Template">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="create_at" jdbcType="BIGINT" property="createAt" />
+        <result column="create_by" jdbcType="BIGINT" property="createBy" />
+        <result column="update_at" jdbcType="BIGINT" property="updateAt" />
+        <result column="update_by" jdbcType="BIGINT" property="updateBy" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="status" jdbcType="TINYINT" property="status" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, create_at, create_by, update_at, update_by, `name`, `status`
+    </sql>
+
+    <parameterMap id="Template" type="com.ptteng.water.system.pojo.Template"/>
+
+    <select id="listTemplate" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from template
+        <where>
+            <if test="name != null">
+               and name like CONCAT(CONCAT('%', #{name}), '%')
+            </if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="findById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from template
+        where id = #{id}
+    </select>
+
+    <insert id="addTemplate" parameterMap="Template" useGeneratedKeys="true" keyProperty="id">
+        insert into
+        template
+         (create_at, create_by, update_at, update_by, `name`)
+         values (#{createAt}, #{createBy}, #{updateAt}, #{updateBy}, #{name})
+    </insert>
+
+    <delete id="deleteTemplate" parameterType="java.lang.Long">
+        delete from template where id = #{id}
+    </delete>
+
+    <update id="updateTemplate" parameterMap="Template">
+        update template
+        <set>
+            <if test="name != null">
+                `name` = #{name},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy},
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy},
+            </if>
+            <if test="createAt != null">
+                create_at = #{createAt},
+            </if>
+            <if test="updateAt != null">
+                update_at = #{updateAt},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

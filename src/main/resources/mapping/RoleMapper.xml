@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ptteng.water.system.mapper.RoleMapper">
+    <resultMap id="ResultMapWithBLOBs" type="com.ptteng.water.system.pojo.Role">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="VARCHAR"/>
+        <result column="level" property="level" jdbcType="INTEGER"/>
+        <result column="create_by" property="createBy" jdbcType="BIGINT"/>
+        <result column="update_by" property="updateBy" jdbcType="BIGINT"/>
+        <result column="update_at" property="updateAt" jdbcType="BIGINT"/>
+        <result column="create_at" property="createAt" jdbcType="BIGINT"/>
+        <result column="permissions" property="permissions" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, name, status, level, create_by, update_by, update_at, create_at, permissions
+    </sql>
+
+    <select id="findById" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from role
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="findListbyIds" resultMap="ResultMapWithBLOBs" parameterType="java.util.List">
+
+            select
+            <include refid="Base_Column_List"/>
+
+            from role
+            where id in
+        <foreach collection="list" item="item" close=")" open="(" index="index" separator=",">
+            #{item,jdbcType=BIGINT}
+        </foreach>
+    </select>
+
+    <select id="findIdsList" resultType="java.lang.Long">
+        select id
+        from role
+    </select>
+
+    <select id="selectByName" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from role
+        where name = #{name,jdbcType=VARCHAR}
+    </select>
+
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from role
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insertRole" parameterType="com.ptteng.water.system.pojo.Role" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into role (id, name, status,
+                          level, create_by, update_by,
+                          update_at, create_at, permissions
+        )
+        values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},
+                #{level,jdbcType=INTEGER}, #{createBy,jdbcType=BIGINT}, #{updateBy,jdbcType=BIGINT},
+                #{updateAt,jdbcType=BIGINT}, #{createAt,jdbcType=BIGINT}, #{permissions,jdbcType=VARCHAR}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.ptteng.water.system.pojo.Role" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="level != null">
+                level,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="updateBy != null">
+                update_by,
+            </if>
+            <if test="updateAt != null">
+                update_at,
+            </if>
+            <if test="createAt != null">
+                create_at,
+            </if>
+            <if test="permissions != null">
+                permissions,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null">
+                #{level,jdbcType=INTEGER},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=BIGINT},
+            </if>
+            <if test="updateBy != null">
+                #{updateBy,jdbcType=BIGINT},
+            </if>
+            <if test="updateAt != null">
+                #{updateAt,jdbcType=BIGINT},
+            </if>
+            <if test="createAt != null">
+                #{createAt,jdbcType=BIGINT},
+            </if>
+            <if test="permissions != null">
+                #{permissions,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.ptteng.water.system.pojo.Role">
+        update role
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null">
+                level = #{level,jdbcType=INTEGER},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=BIGINT},
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy,jdbcType=BIGINT},
+            </if>
+            <if test="updateAt != null">
+                update_at = #{updateAt,jdbcType=BIGINT},
+            </if>
+            <if test="createAt != null">
+                create_at = #{createAt,jdbcType=BIGINT},
+            </if>
+            <if test="permissions != null">
+                permissions = #{permissions,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateById" parameterType="com.ptteng.water.system.pojo.Role">
+        update role
+        set name        = #{name,jdbcType=VARCHAR},
+            status      = #{status,jdbcType=VARCHAR},
+            level       = #{level,jdbcType=INTEGER},
+            create_by   = #{createBy,jdbcType=BIGINT},
+            update_by   = #{updateBy,jdbcType=BIGINT},
+            update_at   = #{updateAt,jdbcType=BIGINT},
+            create_at   = #{createAt,jdbcType=BIGINT},
+            permissions = #{permissions,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>
